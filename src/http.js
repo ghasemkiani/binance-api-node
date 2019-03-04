@@ -3,6 +3,18 @@ import zip from 'lodash.zipobject'
 
 import 'isomorphic-fetch'
 
+let proxy;
+
+const fetch = (url, opts) => {
+	if(proxy) {
+		if(!opts) {
+			opts = {};
+		}
+		opts.agent = /^http/i.test(proxy) ? new HttpProxyAgent(proxy) : /^socks/i.test(proxy) ? new SocksProxyAgent(proxy) : null;
+	}
+	return global.fetch(url, opts);
+};
+
 const BASE = 'https://api.binance.com'
 
 /**
@@ -200,6 +212,10 @@ const aggTrades = payload =>
 export default opts => {
   const pCall = privateCall(opts)
   const kCall = keyCall(opts)
+  
+  if(opts.proxy) {
+	  proxy = opts.proxy;
+  }
 
   return {
     ping: () => publicCall('/v1/ping').then(() => true),
