@@ -2,6 +2,8 @@ import crypto from 'crypto'
 import zip from 'lodash.zipobject'
 
 import 'isomorphic-fetch'
+const SocksProxyAgent = require("socks-proxy-agent");
+const HttpProxyAgent = require("http-proxy-agent");
 
 let proxy;
 
